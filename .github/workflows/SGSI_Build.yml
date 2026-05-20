@@ -81,7 +81,7 @@ jobs:
          sudo ln -sf /usr/bin/python3 /usr/bin/python2
          sudo ln -sf /usr/bin/python3 /usr/bin/python
          
-      - name: Make AB type GSI...
+       - name: Make AB type GSI...
         if: ${{ github.event.inputs.SGSI_TYPE == 'AB' || github.event.inputs.SGSI_TYPE == 'BOTH' }}
         run: |
          # Download and prepare payload-dumper-go
@@ -89,7 +89,7 @@ jobs:
          tar -xf payload-dumper-go_1.2.2_linux_amd64.tar.gz
          chmod +x payload-dumper-go
          
-         # Intercept make.sh payload extraction logic
+         # Manually extract payload.bin using the Go tool
          cd $GITHUB_WORKSPACE/Tool-SGSI-build
          7z x ./tmp/miui_SELENE*.zip payload.bin -o./tmp/ || true
          $GITHUB_WORKSPACE/payload-dumper-go -p system -o ./src/ ./tmp/payload.bin || true
