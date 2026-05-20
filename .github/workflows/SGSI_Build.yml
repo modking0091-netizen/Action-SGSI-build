@@ -76,6 +76,12 @@ jobs:
           sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/setup.sh
           java -version
 
+      - name: Install Python 2 Compatibility
+        run: |
+         sudo apt-get update
+         sudo apt-get install -y python2
+         sudo ln -sf /usr/bin/python2 /usr/bin/python
+
       - name: Make AB type GSI‌‌...
         if: ${{ github.event.inputs.SGSI_TYPE }} == 'AB' || ${{ github.event.inputs.SGSI_TYPE }} == 'BOTH'
         run: |
