@@ -80,20 +80,29 @@ jobs:
         run: |
          sudo ln -sf /usr/bin/python3 /usr/bin/python2
          sudo ln -sf /usr/bin/python3 /usr/bin/python
-
+         
       - name: Make AB type GSI...
         if: ${{ github.event.inputs.SGSI_TYPE == 'AB' || github.event.inputs.SGSI_TYPE == 'BOTH' }}
         run: |
-         sed -i 's/python3 .\/payload\/.payload.py/.\/payload\/payload_extractor/g' $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh
-         chmod +x $GITHUB_WORKSPACE/Tool-SGSI-build/payload/payload_extractor
+         # Download and prepare payload-dumper-go
+         wget https://github.com/ssut/payload-dumper-go/releases/download/1.2.2/payload-dumper-go_1.2.2_linux_amd64.tar.gz
+         tar -xf payload-dumper-go_1.2.2_linux_amd64.tar.gz
+         chmod +x payload-dumper-go
+         
+         # Intercept make.sh payload extraction logic
+         cd $GITHUB_WORKSPACE/Tool-SGSI-build
+         7z x ./tmp/miui_SELENE*.zip payload.bin -o./tmp/ || true
+         $GITHUB_WORKSPACE/payload-dumper-go -p system -o ./src/ ./tmp/payload.bin || true
+         
+         # Run the remaining generic image modifications
          sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh AB <<EOF
          ${{ github.event.inputs.ZIP_NAME }}
-         y 
+         y
          y
          ${{ github.event.inputs.OS_TYPE }}
          y
          EOF
-
+  
       - name: Packing(AB)...
         if: ${{ github.event.inputs.SGSI_TYPE }} == 'AB' || ${{ github.event.inputs.SGSI_TYPE }} == 'BOTH'
         run: |
