@@ -84,17 +84,19 @@ jobs:
       - name: Make AB type GSI...
         if: ${{ github.event.inputs.SGSI_TYPE == 'AB' || github.event.inputs.SGSI_TYPE == 'BOTH' }}
         run: |
-         # Download and prepare payload-dumper-go
+         # 1. Download a stable, native Go extractor binary
          wget https://github.com/ssut/payload-dumper-go/releases/download/1.2.2/payload-dumper-go_1.2.2_linux_amd64.tar.gz
          tar -xf payload-dumper-go_1.2.2_linux_amd64.tar.gz
          chmod +x payload-dumper-go
          
-         # Manually extract payload.bin using the Go tool
+         # 2. Extract payload.bin from your zip manually
          cd $GITHUB_WORKSPACE/Tool-SGSI-build
          7z x ./tmp/miui_SELENE*.zip payload.bin -o./tmp/ || true
+         
+         # 3. Dump only the system.img partition directly where the tool expects it
          $GITHUB_WORKSPACE/payload-dumper-go -p system -o ./src/ ./tmp/payload.bin || true
          
-         # Run the remaining generic image modifications
+         # 4. Run the rest of the generic SGSI processing scripts
          sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh AB <<EOF
          ${{ github.event.inputs.ZIP_NAME }}
          y
