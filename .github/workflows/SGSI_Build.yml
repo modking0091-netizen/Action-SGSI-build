@@ -86,7 +86,7 @@ jobs:
         run: |
          sed -i 's/python /python3 /g' $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh
          sudo apt-get install -y 2to3
-         pip3 install six protobuf==3.20.* --break-system-packages || pip3 install six protobuf==3.20.*
+         sudo pip3 install --break-system-packages six protobuf==3.20.*
          2to3 -w $GITHUB_WORKSPACE/Tool-SGSI-build/payload/
          sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh AB <<EOF
          ${{ github.event.inputs.ZIP_NAME }}
