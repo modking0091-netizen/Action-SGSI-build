@@ -84,13 +84,11 @@ jobs:
       - name: Make AB type GSI...
         if: ${{ github.event.inputs.SGSI_TYPE == 'AB' || github.event.inputs.SGSI_TYPE == 'BOTH' }}
         run: |
-         sed -i 's/python /python3 /g' $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh
-         sudo apt-get install -y 2to3
-         sudo pip3 install --break-system-packages six protobuf==3.20.*
-         2to3 -w $GITHUB_WORKSPACE/Tool-SGSI-build/payload/
+         sed -i 's/python3 .\/payload\/.payload.py/.\/payload\/payload_extractor/g' $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh
+         chmod +x $GITHUB_WORKSPACE/Tool-SGSI-build/payload/payload_extractor
          sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh AB <<EOF
          ${{ github.event.inputs.ZIP_NAME }}
-         y
+         y 
          y
          ${{ github.event.inputs.OS_TYPE }}
          y
