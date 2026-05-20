@@ -85,7 +85,9 @@ jobs:
         if: ${{ github.event.inputs.SGSI_TYPE == 'AB' || github.event.inputs.SGSI_TYPE == 'BOTH' }}
         run: |
          sed -i 's/python /python3 /g' $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh
-         sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh AB << EOF
+         sed -i 's/\([0-9]\+\)L/\1/g' $GITHUB_WORKSPACE/Tool-SGSI-build/payload/update_payload/common.py
+         sed -i 's/print \([^,]*\)$/print(\1)/g' $GITHUB_WORKSPACE/Tool-SGSI-build/payload/update_payload/*.py || true
+         sudo bash $GITHUB_WORKSPACE/Workspace/Tool-SGSI-build/make.sh AB << EOF
          ${{ github.event.inputs.ZIP_NAME }}
          y
          y
