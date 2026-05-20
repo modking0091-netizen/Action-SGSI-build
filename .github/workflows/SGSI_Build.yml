@@ -76,16 +76,11 @@ jobs:
           sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/setup.sh
           java -version
 
-      - name: Install Python 2 Compatibility
+      - name: Set Up Python 3 Payload Dumper
         run: |
-         sudo apt-get update
-         sudo apt-get install -y libpython2.7-minimal libpython2.7-stdlib
-         wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7-minimal_2.7.18-13ubuntu1.1_amd64.deb
-         wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7_2.7.18-13ubuntu1.1_amd64.deb
-         sudo dpkg -i python2.7-minimal_2.7.18-13ubuntu1.1_amd64.deb
-         sudo dpkg -i python2.7_2.7.18-13ubuntu1.1_amd64.deb
-         sudo ln -sf /usr/bin/python2.7 /usr/bin/python2
-         sudo ln -sf /usr/bin/python2.7 /usr/bin/python
+         pip3 install protobuf==3.20.* bsdiff4 target-extractor
+         sudo ln -sf /usr/bin/python3 /usr/bin/python2
+         sudo ln -sf /usr/bin/python3 /usr/bin/python
 
       - name: Make AB type GSI‌‌...
         if: ${{ github.event.inputs.SGSI_TYPE }} == 'AB' || ${{ github.event.inputs.SGSI_TYPE }} == 'BOTH'
